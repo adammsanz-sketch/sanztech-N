@@ -20,7 +20,7 @@ export default function PackagesPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
         {packages.map((pkg) => {
-          const message = encodeURIComponent(`Salam, saya berminat untuk melanggan Pakej ${pkg.name}.`);
+          const message = encodeURIComponent(`Salam, saya berminat untuk melanggan akaun Netflix (${pkg.name}).`);
           const whatsappLink = `https://wa.me/${whatsappNumber}?text=${message}`;
 
           return (

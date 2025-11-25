@@ -23,7 +23,7 @@ const contactInfo = [
 
 export default function ContactPage() {
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '601163969241';
-  const message = encodeURIComponent("Salam, saya ada beberapa soalan mengenai perkhidmatan anda.");
+  const message = encodeURIComponent("Salam, saya berminat untuk melanggan akaun Netflix.");
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${message}`;
 
   return (

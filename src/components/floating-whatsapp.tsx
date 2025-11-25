@@ -18,7 +18,7 @@ const WhatsAppIcon = () => (
 
 export default function FloatingWhatsapp() {
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '601163969241';
-  const message = encodeURIComponent("Salam, saya berminat untuk melanggan pakej VUJ/PRIME/JOY! PREMIUM.");
+  const message = encodeURIComponent("Salam, saya berminat untuk melanggan akaun Netflix.");
 
   return (
     <Button

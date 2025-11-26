@@ -1,4 +1,6 @@
+"use client"
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from '@/components/ui/dialog';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { packages } from '@/data/packages';
 import { CheckCircle } from 'lucide-react';
@@ -6,6 +8,7 @@ import Link from 'next/link';
 
 export default function PackagesPage() {
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '601163969241';
+  const qrSrc = process.env.NEXT_PUBLIC_TNG_QR_SRC || '/tng-qr.png';
   
   return (
     <div className="container mx-auto px-4 py-16">
@@ -22,6 +25,11 @@ export default function PackagesPage() {
         {packages.map((pkg) => {
           const message = encodeURIComponent(`Salam, saya berminat untuk melanggan akaun Netflix (${pkg.name}).`);
           const whatsappLink = `https://wa.me/${whatsappNumber}?text=${message}`;
+          const pay = async () => {
+            const res = await fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan: pkg.name, durationMonths: Number(pkg.duration.replace(/[^0-9]/g,'')) || 1, price: pkg.price, customerName: '', phone: '' }) })
+            const j = await res.json()
+            if (j.url) window.location.href = j.url
+          }
 
           return (
             <Card
@@ -65,10 +73,34 @@ export default function PackagesPage() {
                   </li>
                 </ul>
               </CardContent>
-              <CardFooter>
-                <Button asChild className="w-full font-bold" variant={pkg.highlight ? 'default' : 'secondary'}>
-                  <Link href={whatsappLink} target="_blank" rel="noopener noreferrer">Langgan</Link>
+              <CardFooter className="grid grid-cols-3 gap-2">
+                <Button onClick={pay} className="w-full font-bold" variant={pkg.highlight ? 'default' : 'secondary'}>
+                  Bayar Online
                 </Button>
+                <Button asChild className="w-full font-bold" variant={'secondary'}>
+                  <Link href={whatsappLink} target="_blank" rel="noopener noreferrer">WhatsApp</Link>
+                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button className="w-full font-bold" variant={'outline'}>TNG QR</Button>
+                  </DialogTrigger>
+                  <DialogContent aria-label="Pembayaran TNG QR">
+                    <DialogHeader>
+                      <DialogTitle>Pembayaran Touch 'n Go eWallet</DialogTitle>
+                      <DialogDescription>Imbas QR di bawah dan hantar resit melalui WhatsApp untuk pengesahan segera.</DialogDescription>
+                    </DialogHeader>
+                    <div className="flex justify-center py-4">
+                      {/* unoptimized di cara-order, di sini gunakan img biasa */}
+                      <img src={qrSrc} alt="TNG QR Code" width={250} height={250} className="rounded-lg" />
+                    </div>
+                    <p className="text-center text-sm">Penerima: <strong>MOHD ZULFADLI BIN ZULKEPLI</strong></p>
+                    <div className="pt-4">
+                      <Button asChild className="w-full">
+                        <Link href={whatsappLink} target="_blank" rel="noopener noreferrer">Hantar Resit melalui WhatsApp</Link>
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </CardFooter>
             </Card>
           );

@@ -8,7 +8,7 @@ import Link from 'next/link';
 
 export default function PackagesPage() {
   const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '601163969241';
-  const qrSrc = process.env.NEXT_PUBLIC_TNG_QR_SRC || '/tng-qr.png';
+  
   
   return (
     <div className="container mx-auto px-4 py-16">
@@ -25,11 +25,7 @@ export default function PackagesPage() {
         {packages.map((pkg) => {
           const message = encodeURIComponent(`Salam, saya berminat untuk melanggan akaun Netflix (${pkg.name}).`);
           const whatsappLink = `https://wa.me/${whatsappNumber}?text=${message}`;
-          const pay = async () => {
-            const res = await fetch('/api/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan: pkg.name, durationMonths: Number(pkg.duration.replace(/[^0-9]/g,'')) || 1, price: pkg.price, customerName: '', phone: '' }) })
-            const j = await res.json()
-            if (j.url) window.location.href = j.url
-          }
+          
 
           return (
             <Card
@@ -73,30 +69,22 @@ export default function PackagesPage() {
                   </li>
                 </ul>
               </CardContent>
-              <CardFooter className="grid grid-cols-3 gap-2">
-                <Button onClick={pay} className="w-full font-bold" variant={pkg.highlight ? 'default' : 'secondary'}>
-                  Bayar Online
-                </Button>
-                <Button asChild className="w-full font-bold" variant={'secondary'}>
+              <CardFooter className="grid grid-cols-2 gap-2">
+                <Button asChild className="w-full font-bold" variant={pkg.highlight ? 'default' : 'secondary'}>
                   <Link href={whatsappLink} target="_blank" rel="noopener noreferrer">WhatsApp</Link>
                 </Button>
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button className="w-full font-bold" variant={'outline'}>TNG QR</Button>
+                    <Button className="w-full font-bold" variant={'outline'}>Cara Bayar</Button>
                   </DialogTrigger>
-                  <DialogContent aria-label="Pembayaran TNG QR">
+                  <DialogContent aria-label="Cara Bayar">
                     <DialogHeader>
-                      <DialogTitle>Pembayaran Touch 'n Go eWallet</DialogTitle>
-                      <DialogDescription>Imbas QR di bawah dan hantar resit melalui WhatsApp untuk pengesahan segera.</DialogDescription>
+                      <DialogTitle>Pembayaran Melalui WhatsApp</DialogTitle>
+                      <DialogDescription>Klik butang di bawah untuk terus WhatsApp kami bagi urusan pembayaran.</DialogDescription>
                     </DialogHeader>
-                    <div className="flex justify-center py-4">
-                      {/* unoptimized di cara-order, di sini gunakan img biasa */}
-                      <img src={qrSrc} alt="TNG QR Code" width={250} height={250} className="rounded-lg" />
-                    </div>
-                    <p className="text-center text-sm">Penerima: <strong>MOHD ZULFADLI BIN ZULKEPLI</strong></p>
                     <div className="pt-4">
                       <Button asChild className="w-full">
-                        <Link href={whatsappLink} target="_blank" rel="noopener noreferrer">Hantar Resit melalui WhatsApp</Link>
+                        <Link href={whatsappLink} target="_blank" rel="noopener noreferrer">Terus WhatsApp Untuk Order</Link>
                       </Button>
                     </div>
                   </DialogContent>
